@@ -11,8 +11,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import UnexpectedAlertPresentException
 
-usern = '哇啦嘿咻'
-passwd = '668524'
+usern = 'username'
+passwd = 'password'
 url = 'https://passport.bilibili.com/login'
 # browser = webdriver.Chrome(executable_path='F://BaiduNetdiskDownload//chromedriver.exe')
 options = webdriver.ChromeOptions()
