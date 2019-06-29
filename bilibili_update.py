@@ -11,9 +11,12 @@ from selenium.webdriver.common.by import By
 ACCOUNT = input('请输入您的账号:')
 PASSOWRD = input('请输入您的密码:')
 url = 'https://passport.bilibili.com/login'
-browser = webdriver.Chrome()
+options = webdriver.ChromeOptions()
+options.add_experimental_option('excludeSwitches', ['enable-automation'])  # 此步骤很重要，设置为开发者模式，防止被各大网站识别出来使用了Selenium
+browser = webdriver.Chrome(options=options)
 wait = WebDriverWait(browser, 15)
 browser.get(url)
+browser.maximize_window()
 username = wait.until(EC.element_to_be_clickable((By.ID, 'login-username')))
 password = wait.until(EC.element_to_be_clickable((By.ID, 'login-passwd')))
 submit = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.btn-login')))
@@ -31,7 +34,7 @@ bgImgDataBase64 = browser.execute_script(JSscript)
 print(bgImgDataBase64)
 bgImgDataBase64 = bgImgDataBase64.split('base64,')[-1]
 bgImgData = base64.b64decode(bgImgDataBase64)
-with open("F:\\JupyterWorkspace\\python\\bilibili\\bgImg.png", "wb") as file:
+with open("D:\\PythonWorkspace\\PythonFile\\bilibili\\bgImg.png", "wb") as file:
     file.write(bgImgData)
 
 bgImg = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "canvas.geetest_canvas_fullbg")))
@@ -39,7 +42,7 @@ JSscript = "return document.getElementsByClassName('geetest_canvas_fullbg geetes
 fullbgDataBase64 = browser.execute_script(JSscript)
 fullbgDataBase64 = fullbgDataBase64.split('base64,')[-1]
 fullbgData = base64.b64decode(fullbgDataBase64)
-with open("F:\\JupyterWorkspace\\python\\bilibili\\fullbg.png", "wb") as file:
+with open("D:\\PythonWorkspace\\PythonFile\\bilibili\\fullbg.png", "wb") as file:
     file.write(fullbgData)
 
 bgImg = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "canvas.geetest_canvas_slice")))
@@ -47,11 +50,11 @@ JSscript = "return document.getElementsByClassName('geetest_canvas_slice geetest
 sliderDataBase64 = browser.execute_script(JSscript)
 sliderDataBase64 = fullbgDataBase64.split('base64,')[-1]
 sliderData = base64.b64decode(sliderDataBase64)
-with open("F:\\JupyterWorkspace\\python\\bilibili\\slider.png", "wb") as file:
+with open("D:\\PythonWorkspace\\PythonFile\\bilibili\\slider.png", "wb") as file:
     file.write(sliderData)
 
-fullbg = Image.open("F:\\JupyterWorkspace\\python\\bilibili\\fullbg.png")
-bgImg = Image.open("F:\\JupyterWorkspace\\python\\bilibili\\bgImg.png")
+fullbg = Image.open("D:\\PythonWorkspace\\PythonFile\\bilibili\\fullbg.png")
+bgImg = Image.open("D:\\PythonWorkspace\\PythonFile\\bilibili\\bgImg.png")
 fullbg = np.asarray(fullbg)
 bgImg = np.asarray(bgImg)
 
@@ -120,3 +123,12 @@ for x in sliderPath:
     action.move_by_offset(xoffset=x, yoffset=0)
 time.sleep(1)
 action.release(sliderBlock).perform()
+
+personBlock = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "li[report-id='playpage_account'] > a > .i-face > .face")))
+
+# action.reset_actions()
+action.move_to_element(personBlock).perform()
+
+nick_name = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".header-uname > b")))
+
+print(nick_name.text)
